@@ -1,66 +1,189 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Multi-Auth Starter
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repository contains the source code for a Laravel-based authentication system that supports multiple user roles using Enum, middleware, and role-based routing.
 
-## About Laravel
+## 🔍 Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This Laravel project introduces a simple but effective **multi-auth system** using:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Enum for defining user roles  
+- Middleware to restrict access based on role  
+- Cleanly separated dashboards and routes for different user types  
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🚀 Features
 
-## Learning Laravel
+- Role-based authentication and redirection  
+- Enum-based `UserType` definition  
+- Middleware to restrict access by role  
+- Route grouping by user type (Admin, Manager, User)  
+- Separate dashboards for each role  
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🧱 Technologies
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP 8.1+  
+- Laravel 10  
+- MySQL  
+- Composer  
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧑‍💻 User Roles
 
-## Laravel Sponsors
+Users are assigned a `type` stored in the `users` table:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+| Type     | Value |
+|----------|-------|
+| USER     | 0     |
+| ADMIN    | 1     |
+| MANAGER  | 2     |
 
-### Premium Partners
+This is represented in code using an `enum`:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```php
+// app/Enums/UserType.php
 
-## Contributing
+enum UserType: int {
+    case USER = 0;
+    case ADMIN = 1;
+    case MANAGER = 2;
+}
+````
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🛠 Getting Started
 
-## Code of Conduct
+Follow these steps to set up the project locally:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. **Clone the Repository**
 
-## Security Vulnerabilities
+   ```bash
+   git clone https://github.com/your-username/your-repo.git
+   cd your-repo
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. **Install Dependencies**
 
-## License
+   ```bash
+   composer install
+   npm install && npm run build   # if frontend assets exist
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. **Configure Environment**
+
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+   * Edit `.env` and add your database configuration
+
+4. **Run Migrations**
+
+   ```bash
+   php artisan migrate
+   ```
+
+5. **(Optional) Seed the Database**
+
+   To quickly test role-based authentication, run:
+
+   ```bash
+   php artisan db:seed --class=DataSeeder
+   ```
+
+   This will create three users:
+
+   | Role    | Email                                             | Password |
+   | ------- | ------------------------------------------------- | -------- |
+   | Admin   | [admin@example.com](mailto:admin@example.com)     | password |
+   | Manager | [manager@example.com](mailto:manager@example.com) | password |
+   | User    | [user@example.com](mailto:user@example.com)       | password |
+
+6. **Serve the App**
+
+   ```bash
+   php artisan serve
+   ```
+
+## 🔐 Multi-Auth Implementation
+
+### 1. Database
+
+A new `type` column was added to the `users` table:
+
+```php
+$table->tinyInteger('type')->default(0);
+```
+
+### 2. Enum Casting
+
+In the `User` model:
+
+```php
+protected $casts = [
+    'type' => \App\Enums\UserType::class,
+];
+```
+
+### 3. Middleware: `CheckTypes`
+
+Custom middleware was created to restrict route access based on role:
+
+```php
+if (!in_array(auth()->user()->type, $allowedRoles)) {
+    abort(403, 'Unauthorized');
+}
+```
+
+### 4. Auth Redirection
+
+In `AuthenticatedSessionController`, login redirection is handled like this:
+
+```php
+return match ($user->type) {
+    UserType::ADMIN => redirect()->route('admin.dashboard'),
+    UserType::MANAGER => redirect()->route('manager.dashboard'),
+    UserType::USER => redirect()->route('user.dashboard'),
+    default => redirect()->route('user.dashboard'),
+};
+```
+
+### 5. Role-Based Routes
+
+Defined in `routes/web.php`:
+
+```php
+Route::middleware(['auth', 'CheckTypes:admin'])->prefix('admin')->name('admin.')->group(...);
+Route::middleware(['auth', 'CheckTypes:manager'])->prefix('manager')->name('manager.')->group(...);
+Route::middleware(['auth', 'CheckTypes:user'])->prefix('user')->name('user.')->group(...);
+```
+
+### 6. Role Dashboards
+
+Each user type has its own controller and dashboard view:
+
+* `AdminController` → `/admin/dashboard`
+* `ManagerController` → `/manager/dashboard`
+* `UserController` → `/user/dashboard`
+
+## 📁 Project Structure Highlights
+
+```
+app/
+├── Enums/UserType.php
+├── Http/Middleware/CheckTypes.php
+├── Http/Controllers/AdminController.php
+├── Http/Controllers/ManagerController.php
+├── Http/Controllers/UserController.php
+resources/views/
+├── admin/dashboard.blade.php
+├── manager/dashboard.blade.php
+├── user/dashboard.blade.php
+```
+
+Use these accounts to log in and test role-based functionality.
+
+---
+
+## 📬 Contribution
+
+Feel free to fork, clone, and submit pull requests. Suggestions and improvements are always welcome!
+
+---
