@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Enums\UserType;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -29,7 +30,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return match ($user->type) {
+            UserType::ADMIN => redirect()->route('admin.dashboard'),
+            UserType::MANAGER => redirect()->route('manager.dashboard'),
+            UserType::USER => redirect()->route('user.dashboard'),
+            default => redirect()->route('user.dashboard'),
+        };
+        //return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
