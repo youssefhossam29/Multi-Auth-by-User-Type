@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return match ($user->type) {
+        return match (auth()->user()->type) {
             UserType::ADMIN => redirect()->route('admin.dashboard'),
             UserType::MANAGER => redirect()->route('manager.dashboard'),
             UserType::USER => redirect()->route('user.dashboard'),
